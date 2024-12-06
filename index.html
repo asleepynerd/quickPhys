@@ -49,17 +49,20 @@
         margin: 20px;
         background: #000;
       }
-      .slider-container {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      input[type="range"] {
-        width: 100px;
+      #back-to-main {
+        display: none;
+        margin: 20px;
+        padding: 10px 20px;
+        background: #0066cc;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
       }
     </style>
   </head>
   <body>
+    <button id="back-to-main" onclick="window.location.href='https://sleepy.engineer'">Back to Main</button>
     <div id="controls">
       <div class="control-group">
         <button data-type="sand" class="active">Sand</button>
@@ -92,5 +95,11 @@
     </div>
     <canvas id="canvas"></canvas>
     <script type="module" src="/src/main.js"></script>
+    <script>
+      // Check if the current URL is the proxied one
+      if (window.location.href.startsWith('https://sleepy.engineer/quickphys')) {
+        document.getElementById('back-to-main').style.display = 'block';
+      }
+    </script>
   </body>
 </html>
