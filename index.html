@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enhanced Particle Sandbox</title>
+    <style>
+      body {
+        margin: 0;
+        background: #1a1a1a;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        font-family: Arial, sans-serif;
+        color: white;
+      }
+      #controls {
+        padding: 10px;
+        background: #333;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .control-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 12px;
+        border-right: 1px solid #555;
+      }
+      .control-group:last-child {
+        border-right: none;
+      }
+      button {
+        background: #555;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button.active {
+        background: #0066cc;
+      }
+      #canvas {
+        margin: 20px;
+        background: #000;
+      }
+      .slider-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      input[type="range"] {
+        width: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="controls">
+      <div class="control-group">
+        <button data-type="sand" class="active">Sand</button>
+        <button data-type="water">Water</button>
+        <button data-type="acid">Acid</button>
+        <button data-type="life">Life Cell</button>
+        <button data-type="wall">Wall</button>
+        <button data-type="salt">Salt</button>
+        <button data-type="gunpowder">Gunpowder</button>
+        <button data-type="fire">Fire</button>
+        <button data-type="metal">Metal</button>
+      </div>
+      <div class="control-group">
+        <button data-type="erase">Erase</button>
+        <div class="slider-container">
+          <label for="brush-size">Brush:</label>
+          <input type="range" id="brush-size" min="1" max="20" value="1">
+          <span id="brush-size-value">1</span>
+        </div>
+      </div>
+      <div class="control-group">
+        <button id="clear-all">Clear All</button>
+        <button id="pause-button">Pause</button>
+      </div>
+    </div>
+    <canvas id="canvas"></canvas>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
