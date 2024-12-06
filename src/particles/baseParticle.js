@@ -91,6 +91,38 @@ export class BaseParticle {
 
   render(ctx, cellSize) {
     ctx.fillStyle = this.color;
+    
+    // Add temperature visualization
+    if (this.temperature < 0) {
+      ctx.fillStyle = this.adjustColorForTemperature(this.color, this.temperature, true);
+    } else if (this.temperature > 100) {
+      ctx.fillStyle = this.adjustColorForTemperature(this.color, this.temperature, false);
+    }
+    
     ctx.fillRect(this.x * cellSize, this.y * cellSize, cellSize, cellSize);
+  }
+
+  adjustColorForTemperature(baseColor, temp, isCold) {
+    try {
+      const r = parseInt(baseColor.slice(1, 3), 16);
+      const g = parseInt(baseColor.slice(3, 5), 16);
+      const b = parseInt(baseColor.slice(5, 7), 16);
+
+      if (isCold) {
+        // Add blue tint for cold
+        const intensity = Math.min(255, Math.abs(temp) / 2);
+        return `#${Math.max(0, r - intensity).toString(16).padStart(2, '0')}${
+          Math.max(0, g - intensity / 2).toString(16).padStart(2, '0')}${
+          Math.min(255, b + intensity).toString(16).padStart(2, '0')}`;
+      } else {
+        // Add red tint for hot
+        const intensity = Math.min(255, (temp - 100) / 2);
+        return `#${Math.min(255, r + intensity).toString(16).padStart(2, '0')}${
+          Math.max(0, g - intensity / 2).toString(16).padStart(2, '0')}${
+          Math.max(0, b - intensity).toString(16).padStart(2, '0')}`;
+      }
+    } catch {
+      return baseColor;
+    }
   }
 }

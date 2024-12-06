@@ -9,6 +9,10 @@ import { FireParticle } from './fireParticle.js';
 import { SmokeParticle } from './smokeParticle.js';
 import { MetalParticle } from './metalParticle.js';
 import { SteamParticle } from './steamParticle.js';
+import { BlackHoleParticle } from './blackHoleParticle.js';
+import { UraniumParticle } from './uraniumParticle.js';
+import { RadiationParticle } from './radiationParticle.js';
+import { DustParticle } from './dustParticle.js';
 
 export class ParticleFactory {
   create(x, y, type) {
@@ -35,6 +39,14 @@ export class ParticleFactory {
         return new MetalParticle(x, y);
       case 'steam':
         return new SteamParticle(x, y);
+      case 'blackhole':
+        return new BlackHoleParticle(x, y);
+      case 'uranium':
+        return new UraniumParticle(x, y);
+      case 'radiation':
+        return new RadiationParticle(x, y);
+      case 'dust':
+        return new DustParticle(x, y);
       default:
         return null;
     }

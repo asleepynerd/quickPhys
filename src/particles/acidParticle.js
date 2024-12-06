@@ -1,11 +1,12 @@
 import { BaseParticle } from './baseParticle.js';
-import { WallParticle } from './wallParticle.js';
+import { MetalParticle } from './metalParticle.js';
 
 export class AcidParticle extends BaseParticle {
   constructor(x, y) {
     super(x, y);
     this.color = '#88ff00';
     this.lifetime = 100;
+    this.reactive = true;
   }
 
   update(grid, x, y) {
@@ -18,21 +19,11 @@ export class AcidParticle extends BaseParticle {
       return;
     }
 
-    // Try to dissolve adjacent particles
-    for (let dy = -1; dy <= 1; dy++) {
-      for (let dx = -1; dx <= 1; dx++) {
-        if (dx === 0 && dy === 0) continue;
-        const neighbor = grid.getParticle(x + dx, y + dy);
-        if (neighbor && !(neighbor instanceof AcidParticle)) {
-          if (Math.random() < 0.1) {
-            grid.setParticle(x + dx, y + dy, null);
-            this.lifetime -= 10;
-          }
-        }
-      }
-    }
+    // Add glowing effect
+    const glow = Math.sin(Date.now() / 200) * 20;
+    this.color = `rgb(${136 + glow}, ${255 + glow}, ${glow})`;
 
-    // Move like water
+    // Move like water with some randomness
     if (this.canMoveTo(grid, x, y + 1)) {
       grid.moveParticle(x, y, x, y + 1);
     } else {

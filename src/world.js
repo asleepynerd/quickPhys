@@ -1,6 +1,7 @@
 import { WORLD_WIDTH, WORLD_HEIGHT } from './constants.js';
 import { ParticleFactory } from './particles/particleFactory.js';
 import { LifeParticle } from './particles/lifeParticle.js';
+import { TemperatureTools } from './tools/temperatureTools.js';
 
 export class World {
   constructor() {
@@ -29,6 +30,15 @@ export class World {
   setCell(x, y, type) {
     if (!this.isInBounds(x, y)) return;
     const index = this.getIndex(x, y);
+    if (type === 'cool' || type === 'heat') {
+      const brushSize = document.getElementById('brush-size').value;
+      if (type === 'cool') {
+        TemperatureTools.cool(this, x, y, parseInt(brushSize));
+      } else {
+        TemperatureTools.heat(this, x, y, parseInt(brushSize));
+      }
+      return;
+    }
     const particle = type === 'erase' ? null : this.particleFactory.create(x, y, type);
     this.grid[index] = particle;
     this.nextGrid[index] = particle; 
