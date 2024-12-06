@@ -22,7 +22,7 @@ export class UraniumParticle extends BaseParticle {
 
     this.updateTemperature(grid, x, y);
 
-    // Count nearby uranium for critical mass
+    
     let uraniumCount = 0;
     for (let dy = -2; dy <= 2; dy++) {
       for (let dx = -2; dx <= 2; dx++) {
@@ -34,13 +34,13 @@ export class UraniumParticle extends BaseParticle {
       }
     }
 
-    // Nuclear reaction if critical mass reached or random decay
+    
     if (uraniumCount >= this.criticalMass || Math.random() < this.decayChance) {
       this.nuclearReaction(grid, x, y);
       return;
     }
 
-    // Emit radiation occasionally
+    
     if (Math.random() < 0.05) {
       const angle = Math.random() * Math.PI * 2;
       const rx = Math.round(Math.cos(angle));
@@ -82,11 +82,11 @@ export class UraniumParticle extends BaseParticle {
   }
 
   render(ctx, cellSize) {
-    // Draw base particle
+    
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x * cellSize, this.y * cellSize, cellSize, cellSize);
     
-    // Add radioactive glow
+    
     const glow = Math.sin(Date.now() / 200) * 0.2 + 0.8;
     ctx.fillStyle = `rgba(68, 255, 68, ${glow * 0.3})`;
     ctx.fillRect(

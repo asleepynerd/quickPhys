@@ -9,7 +9,7 @@ export class MetalParticle extends BaseParticle {
     this.conductive = true;
     this.mass = 3;
     this.meltingPoint = 800;
-    this.acidContacts = 0;  // Track acid contacts
+    this.acidContacts = 0;  
   }
 
   update(grid, x, y) {
@@ -18,21 +18,21 @@ export class MetalParticle extends BaseParticle {
 
     this.updateTemperature(grid, x, y);
 
-    // Check for acid contacts
+    
     for (let dy = -1; dy <= 1; dy++) {
       for (let dx = -1; dx <= 1; dx++) {
         if (dx === 0 && dy === 0) continue;
         const neighbor = grid.getParticle(x + dx, y + dy);
         if (neighbor instanceof AcidParticle) {
           this.acidContacts++;
-          // Remove the acid particle
+          
           grid.setParticle(x + dx, y + dy, null);
           
-          // Change metal color to show reaction progress
+          
           const intensity = Math.min(this.acidContacts * 30, 255);
           this.color = `rgb(${128 + intensity}, ${Math.max(0, 128 - intensity)}, ${128 + intensity})`;
           
-          // Create black hole when enough acid has been absorbed
+          
           if (this.acidContacts >= 5) {
             grid.setParticle(x, y, new BlackHoleParticle(x, y));
             return;
@@ -41,12 +41,12 @@ export class MetalParticle extends BaseParticle {
       }
     }
 
-    // Melt if temperature is too high
+    
     if (this.temperature > this.meltingPoint) {
       this.color = '#c0c0c0';
       this.applyPhysics(grid, x, y);
     } else {
-      // Metal stays in place unless melted
+      
       grid.moveParticle(x, y, x, y);
     }
   }

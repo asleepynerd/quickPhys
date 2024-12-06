@@ -25,14 +25,14 @@ export class LifeParticle extends BaseParticle {
 
     const neighbors = this.countNeighbors(grid, x, y);
     
-    // Conway's Game of Life rules
+    
     if (neighbors < 2 || neighbors > 3) {
-      this.nextState = false; // Die
+      this.nextState = false; 
     } else {
-      this.nextState = true; // Stay alive
+      this.nextState = true; 
     }
 
-    // Empty cells with exactly 3 neighbors become alive
+    
     if (neighbors === 3) {
       for (let dy = -1; dy <= 1; dy++) {
         for (let dx = -1; dx <= 1; dx++) {

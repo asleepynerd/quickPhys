@@ -71,16 +71,16 @@ export class World {
   }
 
   update() {
-    // Reset updated flags
+    
     for (let i = 0; i < this.grid.length; i++) {
       if (this.grid[i]) {
         this.grid[i].updated = false;
       }
-      // Copy current grid to next grid at the start of update
+      
       this.nextGrid[i] = this.grid[i];
     }
 
-    // Update from bottom to top, left to right
+    
     for (let y = WORLD_HEIGHT - 1; y >= 0; y--) {
       for (let x = 0; x < WORLD_WIDTH; x++) {
         const cell = this.getCell(x, y);
@@ -90,7 +90,7 @@ export class World {
       }
     }
 
-    // Post-update for Life cells
+    
     for (let y = 0; y < WORLD_HEIGHT; y++) {
       for (let x = 0; x < WORLD_WIDTH; x++) {
         const cell = this.getCell(x, y);
@@ -100,7 +100,7 @@ export class World {
       }
     }
 
-    // Swap grids
+    
     [this.grid, this.nextGrid] = [this.nextGrid, this.grid];
   }
 }

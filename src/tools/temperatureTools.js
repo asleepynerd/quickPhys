@@ -13,17 +13,17 @@ export class TemperatureTools {
         const x = centerX + dx;
         const y = centerY + dy;
         
-        // Check if within circular brush
+        
         if (dx * dx + dy * dy > radius * radius) continue;
         
         const particle = grid.getParticle(x, y);
         if (particle) {
-          // Apply temperature change with falloff based on distance
+          
           const distance = Math.sqrt(dx * dx + dy * dy);
           const falloff = 1 - (distance / radius);
           particle.temperature += amount * falloff;
           
-          // Add visual feedback
+          
           if (amount < 0) {
             particle.color = this.adjustColorForCooling(particle.color);
           }
@@ -33,7 +33,7 @@ export class TemperatureTools {
   }
 
   static adjustColorForCooling(baseColor) {
-    // Add a slight blue tint to show cooling effect
+    
     try {
       const r = parseInt(baseColor.slice(1, 3), 16);
       const g = parseInt(baseColor.slice(3, 5), 16);
@@ -45,7 +45,7 @@ export class TemperatureTools {
 
       return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
     } catch {
-      // If color parsing fails, return original color
+      
       return baseColor;
     }
   }

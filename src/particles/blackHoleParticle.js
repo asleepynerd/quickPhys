@@ -12,7 +12,7 @@ export class BlackHoleParticle extends BaseParticle {
     this.x = x;
     this.y = y;
     
-    // Visual effects
+    
     this.rotationAngle = 0;
     this.pulsePhase = Math.random() * Math.PI * 2;
     this.particleTrails = [];
@@ -24,12 +24,12 @@ export class BlackHoleParticle extends BaseParticle {
     if (this.updated) return;
     this.updated = true;
 
-    // Update visual effects
+    
     this.rotationAngle += 0.15;
     this.pulsePhase += 0.2;
     this.glowSize = 1 + Math.sin(this.pulsePhase) * 0.4;
 
-    // Update particle trails
+    
     this.particleTrails = this.particleTrails
       .map(trail => ({
         ...trail,
@@ -37,7 +37,7 @@ export class BlackHoleParticle extends BaseParticle {
       }))
       .filter(trail => trail.progress < 1);
 
-    // Pull in nearby particles with stronger effect
+    
     const pullRadius = this.radius * 12;
     for (let dy = -pullRadius; dy <= pullRadius; dy++) {
       for (let dx = -pullRadius; dx <= pullRadius; dx++) {
@@ -52,9 +52,9 @@ export class BlackHoleParticle extends BaseParticle {
         if (particle && !(particle instanceof BlackHoleParticle)) {
           const distance = Math.sqrt(dx * dx + dy * dy);
           
-          // Consume particles that get too close
+          
           if (distance <= this.eventHorizonRadius * 1.5) {
-            // Add particle trail effect before consuming
+            
             if (this.particleTrails.length < this.maxTrails) {
               this.particleTrails.push({
                 startX: targetX,
@@ -66,15 +66,15 @@ export class BlackHoleParticle extends BaseParticle {
               });
             }
             
-            // Consume the particle
+            
             grid.setParticle(targetX, targetY, null);
             this.mass += particle.mass;
             this.radius = Math.min(this.maxRadius, 6 + Math.log(this.mass) * 0.5);
             this.eventHorizonRadius = this.radius * 0.6;
             this.pullStrength = Math.min(20, 12 + Math.log(this.mass) * 0.4);
           } else if (distance <= this.eventHorizonRadius * 3) {
-            // Strong pull zone - particles get consumed quickly
-            if (Math.random() < 0.3) { // 30% chance to be consumed per frame
+            
+            if (Math.random() < 0.3) { 
               if (this.particleTrails.length < this.maxTrails) {
                 this.particleTrails.push({
                   startX: targetX,
@@ -89,7 +89,7 @@ export class BlackHoleParticle extends BaseParticle {
               this.mass += particle.mass * 0.5;
             }
           } else if (distance <= pullRadius) {
-            // Normal gravitational pull zone
+            
             const forceFalloff = Math.pow(1 - distance / pullRadius, 2);
             const force = (this.pullStrength * forceFalloff);
             
@@ -100,7 +100,7 @@ export class BlackHoleParticle extends BaseParticle {
             const moveX = Math.cos(spiralAngle) * force;
             const moveY = Math.sin(spiralAngle) * force;
             
-            // Try multiple positions to prevent sticking
+            
             const positions = [
               { x: Math.round(targetX - moveX), y: Math.round(targetY - moveY) },
               { x: Math.round(targetX - moveX * 0.5), y: Math.round(targetY - moveY * 0.5) },
@@ -116,7 +116,7 @@ export class BlackHoleParticle extends BaseParticle {
               }
             }
 
-            // If particle couldn't move and is close enough, consider consuming it
+            
             if (!moved && distance < pullRadius * 0.3 && Math.random() < 0.1) {
               if (this.particleTrails.length < this.maxTrails) {
                 this.particleTrails.push({
@@ -148,7 +148,7 @@ export class BlackHoleParticle extends BaseParticle {
     const centerX = (this.x + 0.5) * cellSize;
     const centerY = (this.y + 0.5) * cellSize;
 
-    // Draw particle trails
+    
     ctx.save();
     this.particleTrails.forEach(trail => {
       const progress = trail.progress;
@@ -169,7 +169,7 @@ export class BlackHoleParticle extends BaseParticle {
     });
     ctx.restore();
 
-    // Draw intense outer glow
+    
     ctx.save();
     const glowRadius = this.radius * cellSize * this.glowSize;
     const gradient = ctx.createRadialGradient(
@@ -178,8 +178,8 @@ export class BlackHoleParticle extends BaseParticle {
     );
     
     const pulseIntensity = 0.9 + Math.sin(this.pulsePhase * 2) * 0.1;
-    gradient.addColorStop(0, `rgba(255, 100, 255, ${pulseIntensity})`);     // Bright pink core
-    gradient.addColorStop(0.2, `rgba(200, 0, 255, ${0.9 * pulseIntensity})`); // Bright purple
+    gradient.addColorStop(0, `rgba(255, 100, 255, ${pulseIntensity})`);     
+    gradient.addColorStop(0.2, `rgba(200, 0, 255, ${0.9 * pulseIntensity})`); 
     gradient.addColorStop(0.4, `rgba(180, 0, 255, ${0.7 * pulseIntensity})`);
     gradient.addColorStop(0.7, `rgba(147, 0, 211, ${0.5 * pulseIntensity})`);
     gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
@@ -189,15 +189,15 @@ export class BlackHoleParticle extends BaseParticle {
     ctx.arc(centerX, centerY, glowRadius, 0, Math.PI * 2);
     ctx.fill();
 
-    // Draw event horizon
+    
     ctx.beginPath();
     ctx.fillStyle = '#000000';
     ctx.arc(centerX, centerY, this.eventHorizonRadius * cellSize, 0, Math.PI * 2);
     ctx.fill();
 
-    // Draw dynamic accretion disk
+    
     ctx.beginPath();
-    ctx.strokeStyle = `rgba(255, 150, 255, ${pulseIntensity})`; // Brighter pink
+    ctx.strokeStyle = `rgba(255, 150, 255, ${pulseIntensity})`; 
     ctx.lineWidth = 3;
     
     const numSpirals = 8;
@@ -218,7 +218,7 @@ export class BlackHoleParticle extends BaseParticle {
     }
     ctx.stroke();
 
-    // Add extra outer glow rings
+    
     const numRings = 2;
     for (let i = 0; i < numRings; i++) {
       ctx.beginPath();

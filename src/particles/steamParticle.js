@@ -22,13 +22,13 @@ export class SteamParticle extends BaseParticle {
 
     this.updateTemperature(grid, x, y);
 
-    // Condense back to water if temperature drops
+    
     if (this.temperature < 100) {
       grid.setParticle(x, y, new WaterParticle(x, y));
       return;
     }
 
-    // Move upward with random drift
+    
     const dx = Math.random() * 2 - 1;
     if (this.canMoveTo(grid, Math.floor(x + dx), y - 1)) {
       grid.moveParticle(x, y, Math.floor(x + dx), y - 1);

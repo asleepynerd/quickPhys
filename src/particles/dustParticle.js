@@ -19,7 +19,7 @@ export class DustParticle extends BaseParticle {
     this.updated = true;
 
     if (this.settled) {
-      if (Math.random() < 0.1) { // Chance to be disturbed
+      if (Math.random() < 0.1) { 
         this.settled = false;
       } else {
         grid.moveParticle(x, y, x, y);
@@ -27,7 +27,7 @@ export class DustParticle extends BaseParticle {
       }
     }
 
-    // Affected by temperature (hot air rises)
+    
     let upwardForce = 0;
     for (let dy = -2; dy <= 2; dy++) {
       for (let dx = -2; dx <= 2; dx++) {
@@ -39,12 +39,12 @@ export class DustParticle extends BaseParticle {
     }
     this.velocity.y -= upwardForce;
 
-    // Apply more air resistance than other particles
+    
     this.velocity.x *= this.airResistance;
     this.velocity.y *= this.airResistance;
 
     if (!this.applyPhysics(grid, x, y)) {
-      if (Math.random() < 0.3) { // Chance to settle
+      if (Math.random() < 0.3) { 
         this.settled = true;
       }
     }

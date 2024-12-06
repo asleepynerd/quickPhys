@@ -18,7 +18,7 @@ export class RadiationParticle extends BaseParticle {
       return;
     }
 
-    // Affect nearby particles
+    
     for (let dy = -1; dy <= 1; dy++) {
       for (let dx = -1; dx <= 1; dx++) {
         if (dx === 0 && dy === 0) continue;
@@ -32,7 +32,7 @@ export class RadiationParticle extends BaseParticle {
       }
     }
 
-    // Random movement
+    
     const dx = Math.floor(Math.random() * 3) - 1;
     const dy = Math.floor(Math.random() * 3) - 1;
     if (this.canMoveTo(grid, x + dx, y + dy)) {

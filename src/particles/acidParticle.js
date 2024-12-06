@@ -19,11 +19,11 @@ export class AcidParticle extends BaseParticle {
       return;
     }
 
-    // Add glowing effect
+    
     const glow = Math.sin(Date.now() / 200) * 20;
     this.color = `rgb(${136 + glow}, ${255 + glow}, ${glow})`;
 
-    // Move like water with some randomness
+    
     if (this.canMoveTo(grid, x, y + 1)) {
       grid.moveParticle(x, y, x, y + 1);
     } else {

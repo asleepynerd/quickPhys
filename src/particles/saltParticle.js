@@ -11,20 +11,20 @@ export class SaltParticle extends BaseParticle {
     if (this.updated) return;
     this.updated = true;
 
-    // Check for water to create salt water
+    
     for (let dy = -1; dy <= 1; dy++) {
       for (let dx = -1; dx <= 1; dx++) {
         if (dx === 0 && dy === 0) continue;
         const neighbor = grid.getParticle(x + dx, y + dy);
         if (neighbor instanceof WaterParticle) {
-          neighbor.color = '#a0c8ff'; // Change water color to indicate salt water
+          neighbor.color = '#a0c8ff'; 
           grid.setParticle(x, y, null);
           return;
         }
       }
     }
 
-    // Move like sand
+    
     if (this.canMoveTo(grid, x, y + 1)) {
       grid.moveParticle(x, y, x, y + 1);
     } else {

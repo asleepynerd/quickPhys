@@ -7,7 +7,7 @@ export class FireParticle extends BaseParticle {
     this.color = '#ff4400';
     this.temperature = 400;
     this.lifetime = Math.random() * 20 + 10;
-    this.velocity.y = -0.5 * Math.random(); // Fire rises
+    this.velocity.y = -0.5 * Math.random(); 
   }
 
   update(grid, x, y) {
@@ -24,7 +24,7 @@ export class FireParticle extends BaseParticle {
       return;
     }
 
-    // Spread fire to flammable neighbors
+    
     for (let dy = -1; dy <= 1; dy++) {
       for (let dx = -1; dx <= 1; dx++) {
         if (dx === 0 && dy === 0) continue;
@@ -35,11 +35,11 @@ export class FireParticle extends BaseParticle {
       }
     }
 
-    // Dynamic color based on lifetime
+    
     const intensity = Math.min(255, Math.floor((this.lifetime / 30) * 255));
     this.color = `rgb(${intensity}, ${intensity / 4}, 0)`;
 
-    // Move upward with some randomness
+    
     const dx = Math.random() * 2 - 1;
     if (this.canMoveTo(grid, Math.floor(x + dx), y - 1)) {
       grid.moveParticle(x, y, Math.floor(x + dx), y - 1);

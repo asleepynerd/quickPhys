@@ -17,19 +17,19 @@ export class WaterParticle extends BaseParticle {
     this.updateTemperature(grid, x, y);
     this.updatePressure(grid, x, y);
 
-    // Check for black hole creation conditions
+    
     if (this.pressure > this.compressionThreshold && this.temperature < -50) {
       grid.setParticle(x, y, new BlackHoleParticle(x, y));
       return;
     }
 
-    // Check for steam conversion
+    
     if (this.temperature >= 100) {
       grid.setParticle(x, y, new SteamParticle(x, y));
       return;
     }
 
-    // Normal water movement
+    
     if (this.canMoveTo(grid, x, y + 1)) {
       grid.moveParticle(x, y, x, y + 1);
     } else {
@@ -43,7 +43,7 @@ export class WaterParticle extends BaseParticle {
   }
 
   updatePressure(grid, x, y) {
-    // Count surrounding water particles
+    
     let waterCount = 0;
     for (let dy = -1; dy <= 1; dy++) {
       for (let dx = -1; dx <= 1; dx++) {

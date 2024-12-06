@@ -17,13 +17,13 @@ export class GunpowderParticle extends BaseParticle {
 
     this.updateTemperature(grid, x, y);
 
-    // Explode if temperature is too high
+    
     if (this.temperature > 100) {
       this.explode(grid, x, y);
       return;
     }
 
-    // Move like sand
+    
     if (!this.applyPhysics(grid, x, y)) {
       const dir = Math.random() < 0.5 ? -1 : 1;
       if (this.canMoveTo(grid, x + dir, y + 1)) {
@@ -33,7 +33,7 @@ export class GunpowderParticle extends BaseParticle {
   }
 
   explode(grid, x, y) {
-    // Create explosion effect
+    
     for (let dy = -this.explosionPower; dy <= this.explosionPower; dy++) {
       for (let dx = -this.explosionPower; dx <= this.explosionPower; dx++) {
         const distance = Math.sqrt(dx * dx + dy * dy);
@@ -44,13 +44,13 @@ export class GunpowderParticle extends BaseParticle {
           if (grid.isInBounds(newX, newY)) {
             const particle = grid.getParticle(newX, newY);
             if (particle) {
-              // Apply explosion force
+              
               particle.velocity.x += dx * 0.5;
               particle.velocity.y += dy * 0.5;
               particle.temperature += 100;
             }
             
-            // Create fire and smoke
+            
             if (Math.random() < 0.3) {
               grid.setParticle(newX, newY, new FireParticle(newX, newY));
             } else if (Math.random() < 0.5) {
@@ -61,7 +61,7 @@ export class GunpowderParticle extends BaseParticle {
       }
     }
     
-    // Remove the exploded gunpowder
+    
     grid.setParticle(x, y, null);
   }
 }

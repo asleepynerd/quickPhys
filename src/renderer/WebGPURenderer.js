@@ -34,30 +34,30 @@ export class WebGPURenderer {
     }
 
     async createBuffers() {
-        // Create particle buffer
+        
         this.particleBuffer = this.device.createBuffer({
-            size: this.maxParticles * 32, // position(8) + velocity(8) + color(16)
+            size: this.maxParticles * 32, 
             usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
         });
 
-        // Create black hole buffer
+        
         this.blackHoleBuffer = this.device.createBuffer({
-            size: 100 * 24, // position(8) + mass(4) + radius(4) + pullStrength(4) + rotation(4)
+            size: 100 * 24, 
             usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
         });
 
-        // Create uniform buffer
+        
         this.uniformBuffer = this.device.createBuffer({
-            size: 32, // viewMatrix(16) + resolution(8) + time(4) + padding(4)
+            size: 32, 
             usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
         });
 
-        // Create vertex buffer for particle quads
+        
         const vertices = new Float32Array([
-            -1, -1,  // Triangle 1
+            -1, -1,  
              1, -1,
              1,  1,
-            -1, -1,  // Triangle 2
+            -1, -1,  
              1,  1,
             -1,  1,
         ]);
@@ -72,7 +72,7 @@ export class WebGPURenderer {
     }
 
     async createPipelines(format) {
-        // Load shader code
+        
         const computeShaderModule = this.device.createShaderModule({
             label: 'Particle compute shader',
             code: await fetch('/src/shaders/particleCompute.wgsl').then(r => r.text())
@@ -83,9 +83,9 @@ export class WebGPURenderer {
             code: await fetch('/src/shaders/particleRender.wgsl').then(r => r.text())
         });
 
-        // Vertex buffer layout
+        
         const vertexBufferLayout = {
-            arrayStride: 8, // 2 floats * 4 bytes
+            arrayStride: 8, 
             attributes: [{
                 format: 'float32x2',
                 offset: 0,
@@ -93,7 +93,7 @@ export class WebGPURenderer {
             }],
         };
 
-        // Create compute pipeline
+        
         this.computePipeline = this.device.createComputePipeline({
             layout: 'auto',
             compute: {
@@ -102,7 +102,7 @@ export class WebGPURenderer {
             }
         });
 
-        // Create render pipeline
+        
         this.renderPipeline = this.device.createRenderPipeline({
             layout: 'auto',
             vertex: {
@@ -132,7 +132,7 @@ export class WebGPURenderer {
             },
         });
 
-        // Create bind groups
+        
         this.bindGroup = this.device.createBindGroup({
             layout: this.computePipeline.getBindGroupLayout(0),
             entries: [
@@ -153,7 +153,7 @@ export class WebGPURenderer {
     }
 
     updateParticles(particles, blackHoles) {
-        // Update particle buffer
+        
         const particleData = new Float32Array(particles.length * 8);
         particles.forEach((p, i) => {
             const idx = i * 8;
@@ -168,7 +168,7 @@ export class WebGPURenderer {
         });
         this.device.queue.writeBuffer(this.particleBuffer, 0, particleData);
 
-        // Update black hole buffer
+        
         const blackHoleData = new Float32Array(blackHoles.length * 6);
         blackHoles.forEach((bh, i) => {
             const idx = i * 6;
@@ -183,25 +183,25 @@ export class WebGPURenderer {
     }
 
     render(time) {
-        // Update uniforms
+        
         const uniformData = new Float32Array([
             this.canvas.width, this.canvas.height,
             time,
-            0, // padding
+            0, 
         ]);
         this.device.queue.writeBuffer(this.uniformBuffer, 0, uniformData);
 
-        // Create command encoder
+        
         const commandEncoder = this.device.createCommandEncoder();
 
-        // Compute pass
+        
         const computePass = commandEncoder.beginComputePass();
         computePass.setPipeline(this.computePipeline);
         computePass.setBindGroup(0, this.bindGroup);
         computePass.dispatchWorkgroups(Math.ceil(this.maxParticles / 256));
         computePass.end();
 
-        // Render pass
+        
         const renderPass = commandEncoder.beginRenderPass({
             colorAttachments: [{
                 view: this.context.getCurrentTexture().createView(),
@@ -214,10 +214,10 @@ export class WebGPURenderer {
         renderPass.setPipeline(this.renderPipeline);
         renderPass.setBindGroup(0, this.bindGroup);
         renderPass.setVertexBuffer(0, this.vertexBuffer);
-        renderPass.draw(6, this.maxParticles); // 6 vertices per quad
+        renderPass.draw(6, this.maxParticles); 
         renderPass.end();
 
-        // Submit GPU commands
+        
         this.device.queue.submit([commandEncoder.finish()]);
     }
 }

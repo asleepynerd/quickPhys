@@ -7,6 +7,6 @@ export class WallParticle extends BaseParticle {
   }
 
   update(grid, x, y) {
-    // Walls don't move or update
+    
   }
 }
