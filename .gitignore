@@ -3,3 +3,4 @@ yarn.lock
 .vscode
 package-lock.json
 dist
+public/generated/*
