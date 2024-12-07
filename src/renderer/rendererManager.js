@@ -80,7 +80,6 @@ export class RendererManager {
     }
 
     parseColor(color) {
-        
         if (color.startsWith('rgba')) {
             const values = color.match(/[\d.]+/g);
             return {
@@ -90,7 +89,6 @@ export class RendererManager {
                 a: parseFloat(values[3])
             };
         }
-        
         
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
         if (result) {
