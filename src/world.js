@@ -77,7 +77,7 @@ export class World {
   }
 
   update() {
-    this.time += 1/60; // Assuming 60fps
+    this.time += 1/60; 
     
     for (let i = 0; i < this.grid.length; i++) {
       if (this.grid[i]) {
@@ -110,7 +110,7 @@ export class World {
     
     [this.grid, this.nextGrid] = [this.nextGrid, this.grid];
     
-    // Render the world
+    
     this.renderer.render(this, this.time);
   }
 }

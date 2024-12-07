@@ -20,13 +20,13 @@ export class ElectricityParticle extends BaseParticle {
             return;
         }
 
-        // Find conductive neighbors and spread
+        
         const directions = [
-            { dx: 0, dy: 1 },  // down
-            { dx: 1, dy: 1 },  // down-right
-            { dx: -1, dy: 1 }, // down-left
-            { dx: 1, dy: 0 },  // right
-            { dx: -1, dy: 0 }  // left
+            { dx: 0, dy: 1 },  
+            { dx: 1, dy: 1 },  
+            { dx: -1, dy: 1 }, 
+            { dx: 1, dy: 0 },  
+            { dx: -1, dy: 0 }  
         ];
 
         for (const dir of directions) {
@@ -42,7 +42,7 @@ export class ElectricityParticle extends BaseParticle {
             }
         }
 
-        // Visual effect
+        
         this.color = `rgb(255, 255, ${Math.random() * 100 + 155})`;
     }
 } 

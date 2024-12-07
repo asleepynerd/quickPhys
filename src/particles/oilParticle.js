@@ -18,14 +18,14 @@ export class OilParticle extends BaseParticle {
 
         this.updateTemperature(grid, x, y);
 
-        // Check for ignition
+        
         if (this.temperature >= this.ignitionTemp) {
             grid.setParticle(x, y, new FireParticle(x, y));
             this.burnTime = Math.random() * 50 + 50;
             return;
         }
 
-        // Move like a viscous liquid
+        
         if (Math.random() > this.viscosity) {
             if (this.canMoveTo(grid, x, y + 1)) {
                 grid.moveParticle(x, y, x, y + 1);

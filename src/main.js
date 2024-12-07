@@ -6,9 +6,7 @@ const canvas = document.getElementById('canvas');
 const renderer = new RendererManager(canvas);
 const world = new World(renderer);
 
-// Handle window resize
 function resize() {
-    // Calculate size while maintaining aspect ratio
     const aspectRatio = WORLD_WIDTH / WORLD_HEIGHT;
     const maxWidth = window.innerWidth - 40;
     const maxHeight = window.innerHeight - 40;
@@ -29,7 +27,7 @@ function resize() {
 window.addEventListener('resize', resize);
 resize();
 
-// Handle mouse input
+
 let isMouseDown = false;
 let currentType = 'sand';
 let isPaused = false;
@@ -37,20 +35,20 @@ let mouseX = 0;
 let mouseY = 0;
 const tempDisplay = document.getElementById('temperature-display');
 
-// Setup brush size display
+
 const brushSlider = document.getElementById('brush-size');
 const brushSizeDisplay = document.getElementById('brush-size-value');
 brushSlider.addEventListener('input', () => {
     brushSizeDisplay.textContent = brushSlider.value;
 });
 
-// Convert mouse coordinates to world coordinates
+
 function getWorldCoordinates(mouseEvent) {
     const rect = canvas.getBoundingClientRect();
     const mouseX = mouseEvent.clientX - rect.left;
     const mouseY = mouseEvent.clientY - rect.top;
     
-    // Convert to world coordinates
+    
     const worldX = Math.floor((mouseX / canvas.width) * WORLD_WIDTH);
     const worldY = Math.floor((mouseY / canvas.height) * WORLD_HEIGHT);
     
@@ -80,7 +78,7 @@ canvas.addEventListener('mousemove', (e) => {
     mouseX = worldPos.x;
     mouseY = worldPos.y;
     
-    // Update temperature display
+    
     const particle = world.getCell(mouseX, mouseY);
     if (particle) {
         const temp = Math.round(particle.temperature);
@@ -114,7 +112,7 @@ function handleMouseInput(e) {
     }
 }
 
-// Game loop
+
 function gameLoop() {
     if (!isPaused) {
         world.update();
@@ -124,13 +122,13 @@ function gameLoop() {
 
 gameLoop();
 
-// Helper function to get temperature color
+
 function getTemperatureColor(temp) {
     if (temp < 0) {
-        return '#00ffff'; // Cyan for cold
+        return '#00ffff'; 
     } else if (temp > 100) {
         const intensity = Math.min(255, Math.floor((temp - 100) * 2));
-        return `rgb(255, ${255 - intensity}, 0)`; // Yellow to red for hot
+        return `rgb(255, ${255 - intensity}, 0)`; 
     }
-    return 'white'; // Normal temperature
+    return 'white'; 
 }

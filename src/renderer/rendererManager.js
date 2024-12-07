@@ -80,7 +80,7 @@ export class RendererManager {
     }
 
     parseColor(color) {
-        // Handle rgba strings
+        
         if (color.startsWith('rgba')) {
             const values = color.match(/[\d.]+/g);
             return {
@@ -91,7 +91,7 @@ export class RendererManager {
             };
         }
         
-        // Handle hex colors
+        
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
         if (result) {
             return {

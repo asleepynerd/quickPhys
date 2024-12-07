@@ -23,7 +23,7 @@ export class PlasmaParticle extends BaseParticle {
             return;
         }
 
-        // Heat and destroy nearby particles
+        
         for (let dy = -2; dy <= 2; dy++) {
             for (let dx = -2; dx <= 2; dx++) {
                 const neighbor = grid.getParticle(x + dx, y + dy);
@@ -36,7 +36,7 @@ export class PlasmaParticle extends BaseParticle {
             }
         }
 
-        // Random movement
+        
         const newX = Math.round(x + this.velocity.x);
         const newY = Math.round(y + this.velocity.y);
         
@@ -44,7 +44,7 @@ export class PlasmaParticle extends BaseParticle {
             grid.moveParticle(x, y, newX, newY);
         }
 
-        // Pulsing effect
+        
         const intensity = Math.sin(Date.now() / 100) * 50;
         this.color = `rgb(${255 + intensity}, ${intensity}, ${255 + intensity})`;
     }

@@ -15,7 +15,7 @@ export class NitrogenParticle extends BaseParticle {
 
         this.updateTemperature(grid, x, y);
 
-        // Freeze nearby particles
+        
         for (let dy = -1; dy <= 1; dy++) {
             for (let dx = -1; dx <= 1; dx++) {
                 const neighbor = grid.getParticle(x + dx, y + dy);
@@ -28,7 +28,7 @@ export class NitrogenParticle extends BaseParticle {
             }
         }
 
-        // Rise and spread
+        
         const dx = Math.floor(Math.random() * 3) - 1;
         const dy = Math.random() < 0.8 ? -1 : 0;
         if (this.canMoveTo(grid, x + dx, y + dy)) {

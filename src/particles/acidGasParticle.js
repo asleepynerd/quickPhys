@@ -19,19 +19,19 @@ export class AcidGasParticle extends BaseParticle {
             return;
         }
 
-        // Corrode particles above
+        
         const above = grid.getParticle(x, y - 1);
         if (above && !(above instanceof AcidGasParticle) && Math.random() < 0.1) {
             grid.setParticle(x, y - 1, null);
         }
 
-        // Condense back to acid
+        
         if (this.temperature < 20) {
             grid.setParticle(x, y, new AcidParticle(x, y));
             return;
         }
 
-        // Rise and spread
+        
         const dx = Math.floor(Math.random() * 3) - 1;
         const dy = Math.random() < 0.8 ? -1 : 0;
         if (this.canMoveTo(grid, x + dx, y + dy)) {

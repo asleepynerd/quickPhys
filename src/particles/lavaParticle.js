@@ -17,13 +17,13 @@ export class LavaParticle extends BaseParticle {
 
         this.updateTemperature(grid, x, y);
 
-        // Cool down and turn to obsidian
+        
         if (this.temperature < 700) {
             grid.setParticle(x, y, new ObsidianParticle(x, y));
             return;
         }
 
-        // Melt nearby particles
+        
         for (let dy = -1; dy <= 1; dy++) {
             for (let dx = -1; dx <= 1; dx++) {
                 if (dx === 0 && dy === 0) continue;
@@ -34,7 +34,7 @@ export class LavaParticle extends BaseParticle {
             }
         }
 
-        // Create smoke occasionally
+        
         if (Math.random() < 0.1) {
             const above = grid.getParticle(x, y - 1);
             if (!above) {
@@ -42,7 +42,7 @@ export class LavaParticle extends BaseParticle {
             }
         }
 
-        // Move like a viscous liquid
+        
         if (Math.random() > this.viscosity) {
             if (this.canMoveTo(grid, x, y + 1)) {
                 grid.moveParticle(x, y, x, y + 1);
@@ -54,7 +54,7 @@ export class LavaParticle extends BaseParticle {
             }
         }
 
-        // Glow effect
+        
         const intensity = Math.sin(Date.now() / 200) * 20;
         this.color = `rgb(${255 + intensity}, ${68 + intensity/2}, 0)`;
     }

@@ -15,13 +15,13 @@ export class ObsidianParticle extends BaseParticle {
 
         this.updateTemperature(grid, x, y);
 
-        // Melt back into lava
+        
         if (this.temperature >= this.meltingPoint) {
             grid.setParticle(x, y, new LavaParticle(x, y));
             return;
         }
 
-        // Acts like a solid
+        
         if (this.canMoveTo(grid, x, y + 1)) {
             grid.moveParticle(x, y, x, y + 1);
         }

@@ -10,7 +10,7 @@ export class DynamiteParticle extends BaseParticle {
         this.flammable = true;
         this.explosionPower = 15;
         this.mass = 3;
-        this.fuseTime = 60; // Ticks until explosion once ignited
+        this.fuseTime = 60; 
         this.isLit = false;
     }
 
@@ -20,18 +20,18 @@ export class DynamiteParticle extends BaseParticle {
 
         this.updateTemperature(grid, x, y);
 
-        // Check if should ignite
+        
         if (!this.isLit && this.temperature > 100) {
             this.isLit = true;
         }
 
-        // Handle lit fuse
+        
         if (this.isLit) {
             this.fuseTime--;
-            // Visual effect for lit fuse
+            
             this.color = this.fuseTime % 2 === 0 ? '#ff3333' : '#ff6666';
             
-            // Create spark particles
+            
             if (Math.random() < 0.3) {
                 const sparkX = x + (Math.random() * 2 - 1);
                 const sparkY = y - Math.random();
@@ -40,14 +40,14 @@ export class DynamiteParticle extends BaseParticle {
                 }
             }
 
-            // Explode when fuse runs out
+            
             if (this.fuseTime <= 0) {
                 this.explode(grid, x, y);
                 return;
             }
         }
 
-        // Fall like other solid objects
+        
         if (this.canMoveTo(grid, x, y + 1)) {
             grid.moveParticle(x, y, x, y + 1);
         } else {
@@ -59,7 +59,7 @@ export class DynamiteParticle extends BaseParticle {
     }
 
     explode(grid, x, y) {
-        // Check for nearby gunpowder to increase explosion
+        
         let gunpowderCount = 0;
         for (let dy = -5; dy <= 5; dy++) {
             for (let dx = -5; dx <= 5; dx++) {
@@ -71,10 +71,10 @@ export class DynamiteParticle extends BaseParticle {
             }
         }
 
-        // Increase explosion power if gunpowder is present
+        
         const totalPower = this.explosionPower + (gunpowderCount * 4);
 
-        // Create explosion
+        
         for (let dy = -totalPower; dy <= totalPower; dy++) {
             for (let dx = -totalPower; dx <= totalPower; dx++) {
                 const distance = Math.sqrt(dx * dx + dy * dy);
@@ -85,12 +85,12 @@ export class DynamiteParticle extends BaseParticle {
                     if (grid.isInBounds(newX, newY)) {
                         const particle = grid.getParticle(newX, newY);
                         if (particle) {
-                            // Apply explosion force
+                            
                             particle.velocity.x += (dx / distance) * 5;
                             particle.velocity.y += (dy / distance) * 5;
                             particle.temperature += 200;
 
-                            // Chain reaction with other explosives
+                            
                             if (particle instanceof DynamiteParticle && !particle.isLit) {
                                 particle.isLit = true;
                                 particle.fuseTime = Math.min(particle.fuseTime, 5);
@@ -99,7 +99,7 @@ export class DynamiteParticle extends BaseParticle {
                             }
                         }
 
-                        // Create explosion effects
+                        
                         if (Math.random() < 0.6) {
                             grid.setParticle(newX, newY, new FireParticle(newX, newY));
                         } else if (Math.random() < 0.5) {
@@ -110,7 +110,7 @@ export class DynamiteParticle extends BaseParticle {
             }
         }
 
-        // Create a secondary shockwave
+        
         const shockwaveRadius = totalPower * 1.5;
         for (let dy = -shockwaveRadius; dy <= shockwaveRadius; dy++) {
             for (let dx = -shockwaveRadius; dx <= shockwaveRadius; dx++) {
@@ -130,12 +130,12 @@ export class DynamiteParticle extends BaseParticle {
             }
         }
 
-        // Remove the dynamite
+        
         grid.setParticle(x, y, null);
     }
 
     render(ctx, cellSize) {
-        // Draw dynamite stick
+        
         ctx.fillStyle = this.color;
         ctx.fillRect(
             this.x * cellSize + cellSize * 0.25,
@@ -144,7 +144,7 @@ export class DynamiteParticle extends BaseParticle {
             cellSize
         );
 
-        // Draw fuse if lit
+        
         if (this.isLit) {
             ctx.beginPath();
             ctx.strokeStyle = '#888888';
@@ -159,7 +159,7 @@ export class DynamiteParticle extends BaseParticle {
             );
             ctx.stroke();
 
-            // Draw spark
+            
             if (this.fuseTime % 2 === 0) {
                 ctx.fillStyle = '#ffff00';
                 ctx.beginPath();
