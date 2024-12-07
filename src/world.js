@@ -4,10 +4,16 @@ import { LifeParticle } from './particles/lifeParticle.js';
 import { TemperatureTools } from './tools/temperatureTools.js';
 
 export class World {
-  constructor() {
+  constructor(renderer) {
     this.grid = new Array(WORLD_WIDTH * WORLD_HEIGHT).fill(null);
     this.nextGrid = new Array(WORLD_WIDTH * WORLD_HEIGHT).fill(null);
     this.particleFactory = new ParticleFactory();
+    this.renderer = renderer;
+    this.time = 0;
+    this.cellSize = Math.min(
+      this.renderer.canvas.width / WORLD_WIDTH,
+      this.renderer.canvas.height / WORLD_HEIGHT
+    );
   }
 
   getIndex(x, y) {
@@ -71,6 +77,7 @@ export class World {
   }
 
   update() {
+    this.time += 1/60; // Assuming 60fps
     
     for (let i = 0; i < this.grid.length; i++) {
       if (this.grid[i]) {
@@ -102,5 +109,8 @@ export class World {
 
     
     [this.grid, this.nextGrid] = [this.nextGrid, this.grid];
+    
+    // Render the world
+    this.renderer.render(this, this.time);
   }
 }

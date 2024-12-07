@@ -12,24 +12,18 @@ export class BlackHoleParticle extends BaseParticle {
     this.x = x;
     this.y = y;
     
-    
-    this.rotationAngle = 0;
     this.pulsePhase = Math.random() * Math.PI * 2;
     this.particleTrails = [];
     this.maxTrails = 50;
-    this.glowSize = 1;
   }
 
   update(grid, x, y) {
     if (this.updated) return;
     this.updated = true;
 
-    
     this.rotationAngle += 0.15;
     this.pulsePhase += 0.2;
-    this.glowSize = 1 + Math.sin(this.pulsePhase) * 0.4;
 
-    
     this.particleTrails = this.particleTrails
       .map(trail => ({
         ...trail,
@@ -37,7 +31,6 @@ export class BlackHoleParticle extends BaseParticle {
       }))
       .filter(trail => trail.progress < 1);
 
-    
     const pullRadius = this.radius * 12;
     for (let dy = -pullRadius; dy <= pullRadius; dy++) {
       for (let dx = -pullRadius; dx <= pullRadius; dx++) {
@@ -52,9 +45,7 @@ export class BlackHoleParticle extends BaseParticle {
         if (particle && !(particle instanceof BlackHoleParticle)) {
           const distance = Math.sqrt(dx * dx + dy * dy);
           
-          
           if (distance <= this.eventHorizonRadius * 1.5) {
-            
             if (this.particleTrails.length < this.maxTrails) {
               this.particleTrails.push({
                 startX: targetX,
@@ -66,14 +57,12 @@ export class BlackHoleParticle extends BaseParticle {
               });
             }
             
-            
             grid.setParticle(targetX, targetY, null);
             this.mass += particle.mass;
             this.radius = Math.min(this.maxRadius, 6 + Math.log(this.mass) * 0.5);
             this.eventHorizonRadius = this.radius * 0.6;
             this.pullStrength = Math.min(20, 12 + Math.log(this.mass) * 0.4);
           } else if (distance <= this.eventHorizonRadius * 3) {
-            
             if (Math.random() < 0.3) { 
               if (this.particleTrails.length < this.maxTrails) {
                 this.particleTrails.push({
@@ -89,7 +78,6 @@ export class BlackHoleParticle extends BaseParticle {
               this.mass += particle.mass * 0.5;
             }
           } else if (distance <= pullRadius) {
-            
             const forceFalloff = Math.pow(1 - distance / pullRadius, 2);
             const force = (this.pullStrength * forceFalloff);
             
@@ -99,7 +87,6 @@ export class BlackHoleParticle extends BaseParticle {
             
             const moveX = Math.cos(spiralAngle) * force;
             const moveY = Math.sin(spiralAngle) * force;
-            
             
             const positions = [
               { x: Math.round(targetX - moveX), y: Math.round(targetY - moveY) },
@@ -116,7 +103,6 @@ export class BlackHoleParticle extends BaseParticle {
               }
             }
 
-            
             if (!moved && distance < pullRadius * 0.3 && Math.random() < 0.1) {
               if (this.particleTrails.length < this.maxTrails) {
                 this.particleTrails.push({
@@ -145,89 +131,43 @@ export class BlackHoleParticle extends BaseParticle {
   }
 
   render(ctx, cellSize) {
-    const centerX = (this.x + 0.5) * cellSize;
-    const centerY = (this.y + 0.5) * cellSize;
-
-    
     ctx.save();
     this.particleTrails.forEach(trail => {
       const progress = trail.progress;
       const x = trail.startX + (trail.endX - trail.startX) * progress;
       const y = trail.startY + (trail.endY - trail.startY) * progress;
       
-      ctx.fillStyle = trail.color;
-      ctx.globalAlpha = (1 - progress) * 2;
-      ctx.beginPath();
-      ctx.arc(
-        (x + 0.5) * cellSize,
-        (y + 0.5) * cellSize,
-        cellSize * 0.7,
-        0,
-        Math.PI * 2
+      ctx.fillStyle = `rgba(147, 0, 211, ${1 - progress})`;
+      ctx.fillRect(
+        (x + 0.5) * cellSize - cellSize/2,
+        (y + 0.5) * cellSize - cellSize/2,
+        cellSize,
+        cellSize
       );
-      ctx.fill();
     });
-    ctx.restore();
 
-    
-    ctx.save();
-    const glowRadius = this.radius * cellSize * this.glowSize;
-    const gradient = ctx.createRadialGradient(
-      centerX, centerY, 0,
-      centerX, centerY, glowRadius
-    );
-    
-    const pulseIntensity = 0.9 + Math.sin(this.pulsePhase * 2) * 0.1;
-    gradient.addColorStop(0, `rgba(255, 100, 255, ${pulseIntensity})`);     
-    gradient.addColorStop(0.2, `rgba(200, 0, 255, ${0.9 * pulseIntensity})`); 
-    gradient.addColorStop(0.4, `rgba(180, 0, 255, ${0.7 * pulseIntensity})`);
-    gradient.addColorStop(0.7, `rgba(147, 0, 211, ${0.5 * pulseIntensity})`);
-    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    const pulseIntensity = 0.5 + Math.sin(this.pulsePhase) * 0.3;
+    const currentRadius = Math.ceil(this.radius * pulseIntensity);
 
-    ctx.beginPath();
-    ctx.fillStyle = gradient;
-    ctx.arc(centerX, centerY, glowRadius, 0, Math.PI * 2);
-    ctx.fill();
-
-    
-    ctx.beginPath();
-    ctx.fillStyle = '#000000';
-    ctx.arc(centerX, centerY, this.eventHorizonRadius * cellSize, 0, Math.PI * 2);
-    ctx.fill();
-
-    
-    ctx.beginPath();
-    ctx.strokeStyle = `rgba(255, 150, 255, ${pulseIntensity})`; 
-    ctx.lineWidth = 3;
-    
-    const numSpirals = 8;
-    for (let i = 0; i < numSpirals; i++) {
-      const angle = this.rotationAngle + (Math.PI * 2 / numSpirals) * i;
-      const waveOffset = Math.sin(this.pulsePhase + i) * 2;
-      const spiralStart = cellSize * (1.5 + waveOffset);
-      const spiralEnd = glowRadius * (0.8 + Math.cos(this.pulsePhase + i) * 0.2);
-      
-      ctx.moveTo(
-        centerX + Math.cos(angle) * spiralStart,
-        centerY + Math.sin(angle) * spiralStart
-      );
-      ctx.lineTo(
-        centerX + Math.cos(angle) * spiralEnd,
-        centerY + Math.sin(angle) * spiralEnd
-      );
+    for (let dy = -currentRadius; dy <= currentRadius; dy++) {
+      for (let dx = -currentRadius; dx <= currentRadius; dx++) {
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance <= currentRadius) {
+          const px = this.x * cellSize + dx * cellSize;
+          const py = this.y * cellSize + dy * cellSize;
+          
+          if (distance < this.eventHorizonRadius) {
+            ctx.fillStyle = '#000000';
+          } else {
+            const alpha = (1 - distance/currentRadius) * pulseIntensity;
+            ctx.fillStyle = `rgba(147, 0, 211, ${alpha})`;
+          }
+          
+          ctx.fillRect(px, py, cellSize, cellSize);
+        }
+      }
     }
-    ctx.stroke();
 
-    
-    const numRings = 2;
-    for (let i = 0; i < numRings; i++) {
-      ctx.beginPath();
-      ctx.strokeStyle = `rgba(255, 200, 255, ${0.3 * pulseIntensity * (1 - i/numRings)})`;
-      ctx.lineWidth = 2 - i;
-      ctx.arc(centerX, centerY, glowRadius * (1.1 + i * 0.1), 0, Math.PI * 2);
-      ctx.stroke();
-    }
-    
     ctx.restore();
   }
 } 

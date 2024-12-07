@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Enhanced Particle Sandbox</title>
+    <title>QuickPhys</title>
     <style>
       body {
         margin: 0;
@@ -20,9 +20,11 @@
         background: #333;
         width: 100%;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 8px;
-        flex-wrap: wrap;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
       }
       .control-group {
         display: flex;
@@ -30,6 +32,7 @@
         gap: 8px;
         padding: 0 12px;
         border-right: 1px solid #555;
+        flex-shrink: 0;
       }
       .control-group:last-child {
         border-right: none;
@@ -59,14 +62,34 @@
         border-radius: 5px;
         cursor: pointer;
       }
+      #controls::-webkit-scrollbar {
+        height: 8px;
+      }
+      #controls::-webkit-scrollbar-track {
+        background: #222;
+        border-radius: 4px;
+      }
+      #controls::-webkit-scrollbar-thumb {
+        background: #666;
+        border-radius: 4px;
+      }
+      #controls::-webkit-scrollbar-thumb:hover {
+        background: #888;
+      }
     </style>
   </head>
   <body>
-    <button id="back-to-main" onclick="window.location.href='https://sleepy.engineer'">Back to Main</button>
+    <button
+      id="back-to-main"
+      onclick="window.location.href='https://sleepy.engineer'"
+    >
+      Back to Main
+    </button>
     <div id="controls">
       <div class="control-group">
         <button data-type="sand" class="active">Sand</button>
         <button data-type="water">Water</button>
+        <button data-type="ice">Ice</button>
         <button data-type="acid">Acid</button>
         <button data-type="life">Life Cell</button>
         <button data-type="wall">Wall</button>
@@ -74,6 +97,14 @@
         <button data-type="gunpowder">Gunpowder</button>
         <button data-type="fire">Fire</button>
         <button data-type="metal">Metal</button>
+        <button data-type="electricity">Electricity</button>
+        <button data-type="plasma">Plasma</button>
+        <button data-type="oil">Oil</button>
+        <button data-type="nitrogen">Nitrogen</button>
+        <button data-type="dynamite">Dynamite</button>
+        <button data-type="lava">Lava</button>
+        <button data-type="obsidian">Obsidian</button>
+        <button data-type="acidgas">Acid Gas</button>
         <button data-type="uranium">Uranium</button>
         <button data-type="dust">Dust</button>
         <button data-type="blackhole">Blackhole</button>
@@ -91,14 +122,19 @@
       <div class="control-group">
         <button id="clear-all">Clear All</button>
         <button id="pause-button">Pause</button>
+        <div id="temperature-display" style="color: white; margin-left: 10px">
+          Temperature: --°C
+        </div>
       </div>
     </div>
     <canvas id="canvas"></canvas>
     <script type="module" src="/src/main.js"></script>
     <script>
       // Check if the current URL is the proxied one
-      if (window.location.href.startsWith('https://sleepy.engineer/quickphys')) {
-        document.getElementById('back-to-main').style.display = 'block';
+      if (
+        window.location.href.startsWith("https://sleepy.engineer/quickphys")
+      ) {
+        document.getElementById("back-to-main").style.display = "block";
       }
     </script>
   </body>
